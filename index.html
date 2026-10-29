@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Asymptotes & Functions - رياضيات 12 متقدم بريدج | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي عن الخطوط المقاربة والدوال - رياضيات 12 متقدم بريدج">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+[dir="ltr"] .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.2em; padding: 2px 8px; background: #fef3c7; border-radius: 6px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2"> الوقت المتبقي:</span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">60:00</span>
+<span class="shuffle-badge">📊 Asymptotes & Functions - 25 سؤال</span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 إظهار/إخفاء الإجابات</button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">️ طباعة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 أسئلة جديدة</button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ مسح التقدم</button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH 12 ADVANCED BRIDGE - QUESTION 6</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📊 الخطوط المقاربة والدوال</h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2">رياضيات 12 متقدم بريدج</h2>
+<p class="text-gray-600 mb-4">Asymptotes, Rational Functions & Applications</p>
+<p class="text-sm text-green-600 font-semibold">💾 يتم حفظ تقدمك تلقائياً - 25 سؤالاً في 5 أقسام</p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 التاريخ: <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 الاسم: <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" placeholder="اكتب اسمك"></span>
+<span>🏫 الشعبة: <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" placeholder="الشعبة"></span>
+<span>⏰ المدة: 60 دقيقة</span>
+<span>📊 المجموع: 100 درجة</span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 قواعد الخطوط المقاربة</h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box"><strong>Vertical Asymptote:</strong><br>Denominator = 0</div>
+<div class="formula-box"><strong>Horizontal Asymptote:</strong><br>lim x→±∞ f(x) = L</div>
+<div class="formula-box"><strong>Oblique Asymptote:</strong><br>Degree num = degree den + 1</div>
+<div class="formula-box"><strong>If deg num &lt; deg den:</strong><br>y = 0 is H.A.</div>
+<div class="formula-box"><strong>If deg num = deg den:</strong><br>y = leading coeff ratio</div>
+<div class="formula-box"><strong>If deg num &gt; deg den:</strong><br>No H.A. (may have O.A.)</div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 صحح إجاباتي!</button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 نتيجتك يا بطل! </h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 الاسم</p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500">نسبة النجاح</p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 أدائك في كل قسم:</h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 أرسل النتيجة للمعلم</button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Asymptotes & Functions - Grade 12 Advanced Bridge | Mr. Mohammed Hesham 📊
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'asymptotes_functions_grade12_bridge_v1';
+const TOTAL_TIME = 3600;
+const TOTAL_QUESTIONS = 25;
+const TOTAL_SECTIONS = 5;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+    // Vertical asymptote x=2 for 1/(x-2)
+    vertical_asymptote: `<svg class="svg-graph" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="290" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">خط مقارب رأسي - Vertical Asymptote</text>
+        <!-- Axes -->
+        <line x1="50" y1="250" x2="370" y2="250" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="200" y1="250" x2="200" y2="30" stroke="#374151" stroke-width="2" marker-end="url(#arrow)"/>
+        <text x="380" y="255" font-size="12" fill="#374151">x</text>
+        <text x="190" y="25" font-size="12" fill="#374151">y</text>
+        <text x="200" y="265" text-anchor="middle" font-size="10" fill="#374151">0</text>
+        <!-- Vertical asymptote at x=2 (position 280) -->
+        <line x1="280" y1="30" x2="280" y2="250" stroke="#dc2626" stroke-width="2" stroke-dasharray="5"/>
+        <text x="290" y="45" font-size="11" fill="#dc2626" font-weight="bold">x = 2</text>
+        <!-- Curve 1/(x-2) right branch -->
+        <path d="M 290 50 Q 310 100 330 150 Q 350 200 370 230" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <!-- Curve 1/(x-2) left branch -->
+        <path d="M 270 230 Q 250 200 230 150 Q 210 100 190 50" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="340" y="200" font-size="10" fill="#2563eb">y = 1/(x-2)</text>
+        <text x="200" y="280" text-anchor="middle" font-size="11" fill="#92400e">As x → 2, y → ±∞</text>
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`,
+    
+    // Horizontal asymptote y=1 for x/(x-1)
+    horizontal_asymptote: `<svg class="svg-graph" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="290" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">خط مقارب أفقي - Horizontal Asymptote</text>
+        <!-- Axes -->
+        <line x1="50" y1="250" x2="370" y2="250" stroke="#374151" stroke-width="2" marker-end="url(#arrow2)"/>
+        <line x1="200" y1="250" x2="200" y2="30" stroke="#374151" stroke-width="2" marker-end="url(#arrow2)"/>
+        <text x="380" y="255" font-size="12" fill="#374151">x</text>
+        <text x="190" y="25" font-size="12" fill="#374151">y</text>
+        <!-- Horizontal asymptote y=1 -->
+        <line x1="50" y1="150" x2="370" y2="150" stroke="#dc2626" stroke-width="2" stroke-dasharray="5"/>
+        <text x="375" y="145" font-size="11" fill="#dc2626" font-weight="bold">y = 1</text>
+        <!-- Curve x/(x-1) -->
+        <path d="M 60 200 Q 120 170 180 160 Q 220 155 280 152 Q 330 150 370 148" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <path d="M 220 240 Q 225 200 230 160" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="300" y="170" font-size="10" fill="#2563eb">y = x/(x-1)</text>
+        <text x="200" y="280" text-anchor="middle" font-size="11" fill="#1e40af">As x → ±∞, y → 1</text>
+        <defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`,
+    
+    // Oblique asymptote
+    oblique_asymptote: `<svg class="svg-graph" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="290" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">خط مقارب مائل - Oblique Asymptote</text>
+        <!-- Axes -->
+        <line x1="50" y1="250" x2="370" y2="250" stroke="#374151" stroke-width="2" marker-end="url(#arrow3)"/>
+        <line x1="200" y1="250" x2="200" y2="30" stroke="#374151" stroke-width="2" marker-end="url(#arrow3)"/>
+        <text x="380" y="255" font-size="12" fill="#374151">x</text>
+        <text x="190" y="25" font-size="12" fill="#374151">y</text>
+        <!-- Oblique asymptote y = x -->
+        <line x1="80" y1="220" x2="350" y2="50" stroke="#dc2626" stroke-width="2" stroke-dasharray="5"/>
+        <text x="340" y="45" font-size="11" fill="#dc2626" font-weight="bold">y = x</text>
+        <!-- Curve (x²+1)/(x-1) -->
+        <path d="M 100 240 Q 150 200 180 150 Q 200 100 220 80 Q 250 60 300 55 Q 340 52 370 50" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+        <text x="280" y="100" font-size="10" fill="#2563eb">y = (x²+1)/(x-1)</text>
+        <text x="200" y="280" text-anchor="middle" font-size="11" fill="#9f1239">Curve approaches line y = x as x → ±∞</text>
+        <defs><marker id="arrow3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`,
+    
+    // Pupil size application
+    pupil_application: `<svg class="svg-graph" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="290" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">تطبيق: حجم بؤبؤ العين - Exercise 33</text>
+        <!-- Eye diagram -->
+        <ellipse cx="200" cy="150" rx="80" ry="60" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+        <circle cx="200" cy="150" r="35" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+        <circle cx="200" cy="150" r="15" fill="#1e1b4b"/>
+        <text x="200" y="155" text-anchor="middle" font-size="10" fill="white" font-weight="bold">Pupil</text>
+        <!-- Light rays -->
+        <line x1="50" y1="100" x2="165" y2="130" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow4)"/>
+        <line x1="50" y1="150" x2="165" y2="150" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow4)"/>
+        <line x1="50" y1="200" x2="165" y2="170" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow4)"/>
+        <text x="30" y="95" font-size="10" fill="#f59e0b" font-weight="bold">Light</text>
+        <!-- Formula -->
+        <text x="200" y="240" text-anchor="middle" font-size="12" fill="#065f46" font-family="'Amiri', serif">f(x) = (80x⁰·³ + 60)/(2x⁻⁰·³ + 5)</text>
+        <text x="200" y="260" text-anchor="middle" font-size="11" fill="#065f46">x = light intensity (millilux)</text>
+        <text x="200" y="278" text-anchor="middle" font-size="11" fill="#065f46">f(x) = pupil size (mm)</text>
+        <text x="200" y="295" text-anchor="middle" font-size="10" fill="#065f46">As x → ∞, f(x) → 60/5 = 12 mm</text>
+        <defs><marker id="arrow4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f59e0b"/></marker></defs>
+    </svg>`,
+    
+    // Rational function with hole
+    rational_with_hole: `<svg class="svg-graph" width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="290" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">دالة كسرية مع فجوة - Rational with Hole</text>
+        <!-- Axes -->
+        <line x1="50" y1="250" x2="370" y2="250" stroke="#374151" stroke-width="2" marker-end="url(#arrow5)"/>
+        <line x1="200" y1="250" x2="200" y2="30" stroke="#374151" stroke-width="2" marker-end="url(#arrow5)"/>
+        <text x="380" y="255" font-size="12" fill="#374151">x</text>
+        <text x="190" y="25" font-size="12" fill="#374151">y</text>
+        <!-- Line y = x+3 with hole at x=1 -->
+        <line x1="60" y1="230" x2="140" y2="190" stroke="#7c3aed" stroke-width="3"/>
+        <line x1="160" y1="180" x2="360" y2="80" stroke="#7c3aed" stroke-width="3"/>
+        <!-- Hole at (1, 4) -->
+        <circle cx="150" cy="185" r="6" fill="white" stroke="#dc2626" stroke-width="3"/>
+        <text x="170" y="175" font-size="10" fill="#dc2626" font-weight="bold">Hole (1, 4)</text>
+        <!-- Vertical asymptote would be here if not canceled -->
+        <text x="200" y="275" text-anchor="middle" font-size="11" fill="#5b21b6">f(x) = (x²+2x-3)/(x-1) = x+3, x≠1</text>
+        <text x="200" y="290" text-anchor="middle" font-size="10" fill="#5b21b6">Hole at x=1, no vertical asymptote</text>
+        <defs><marker id="arrow5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#374151"/></marker></defs>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 25 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: ' القسم 1: الخطوط المقاربة الرأسية (Q1-Q5)', en: '🔹 Section 1: Vertical Asymptotes (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: 'ما الخط المقارب الرأسي للدالة <span class="math-display">f(x) = 1/(x-2)</span>؟', en: 'What is the vertical asymptote of <span class="math-display">f(x) = 1/(x-2)</span>?' },
+                    svg: svgGraphs.vertical_asymptote,
+                    options: [
+                        { ar: '<span class="math-display">x = 2</span>', en: '<span class="math-display">x = 2</span>' },
+                        { ar: '<span class="math-display">x = -2</span>', en: '<span class="math-display">x = -2</span>' },
+                        { ar: '<span class="math-display">y = 2</span>', en: '<span class="math-display">y = 2</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'المقام = 0 عندما x = 2، إذن x = 2 خط مقارب رأسي', en: 'Denominator = 0 when x = 2, so x = 2 is vertical asymptote' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الرأسي للدالة <span class="math-display">f(x) = (3x²+1)/(x²-2x-3)</span>؟ (تمرين 25)', en: 'What are vertical asymptotes of <span class="math-display">f(x) = (3x²+1)/(x²-2x-3)</span>? (Exercise 25)' },
+                    options: [
+                        { ar: '<span class="math-display">x = 3</span> و <span class="math-display">x = -1</span>', en: '<span class="math-display">x = 3</span> and <span class="math-display">x = -1</span>' },
+                        { ar: '<span class="math-display">x = 1</span> و <span class="math-display">x = -3</span>', en: '<span class="math-display">x = 1</span> and <span class="math-display">x = -3</span>' },
+                        { ar: '<span class="math-display">x = 3</span> فقط', en: '<span class="math-display">x = 3</span> only' },
+                        { ar: '<span class="math-display">y = 3</span>', en: '<span class="math-display">y = 3</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x²-2x-3 = (x-3)(x+1) = 0 → x = 3 أو x = -1', en: 'x²-2x-3 = (x-3)(x+1) = 0 → x = 3 or x = -1' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الرأسي للدالة <span class="math-display">f(x) = (1-x)/(x²+x-2)</span>؟ (تمرين 26)', en: 'What are vertical asymptotes of <span class="math-display">f(x) = (1-x)/(x²+x-2)</span>? (Exercise 26)' },
+                    options: [
+                        { ar: '<span class="math-display">x = -2</span> فقط (لأن x=1 فجوة)', en: '<span class="math-display">x = -2</span> only (x=1 is hole)' },
+                        { ar: '<span class="math-display">x = 1</span> و <span class="math-display">x = -2</span>', en: '<span class="math-display">x = 1</span> and <span class="math-display">x = -2</span>' },
+                        { ar: '<span class="math-display">x = 1</span> فقط', en: '<span class="math-display">x = 1</span> only' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x²+x-2 = (x+2)(x-1). البسط = -(x-1). يختصر (x-1) → فجوة عند x=1، خط مقارب عند x=-2', en: 'x²+x-2 = (x+2)(x-1). Numerator = -(x-1). (x-1) cancels → hole at x=1, asymptote at x=-2' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الرأسي للدالة <span class="math-display">f(x) = 1/x</span>؟', en: 'What is vertical asymptote of <span class="math-display">f(x) = 1/x</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">x = 1</span>', en: '<span class="math-display">x = 1</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'المقام = 0 عندما x = 0', en: 'Denominator = 0 when x = 0' }
+                },
+                {
+                    q: { ar: 'متى يكون للدالة الكسرية خط مقارب رأسي عند x=a؟', en: 'When does rational function have vertical asymptote at x=a?' },
+                    options: [
+                        { ar: 'عندما المقام = 0 عند x=a والبسط ≠ 0', en: 'When denominator = 0 at x=a and numerator ≠ 0' },
+                        { ar: 'عندما البسط = 0', en: 'When numerator = 0' },
+                        { ar: 'عندما البسط والمقام = 0 معاً', en: 'When both numerator and denominator = 0' },
+                        { ar: 'دائماً', en: 'Always' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'خط مقارب رأسي عندما المقام = 0 والبسط ≠ 0. إذا كلاهما = 0، قد تكون هناك فجوة', en: 'Vertical asymptote when denominator = 0 and numerator ≠ 0. If both = 0, may be hole' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: ' القسم 2: الخطوط المقاربة الأفقية (Q6-Q10)', en: ' Section 2: Horizontal Asymptotes (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = (3x²+1)/(x²-2x-3)</span>؟', en: 'What is horizontal asymptote of <span class="math-display">f(x) = (3x²+1)/(x²-2x-3)</span>?' },
+                    svg: svgGraphs.horizontal_asymptote,
+                    options: [
+                        { ar: '<span class="math-display">y = 3</span>', en: '<span class="math-display">y = 3</span>' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط = درجة المقام = 2. النسبة = 3/1 = 3. إذن y = 3', en: 'Degree num = degree den = 2. Ratio = 3/1 = 3. So y = 3' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = (1-x)/(x²+x-2)</span>؟', en: 'What is horizontal asymptote of <span class="math-display">f(x) = (1-x)/(x²+x-2)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = -1</span>', en: '<span class="math-display">y = -1</span>' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط (1) < درجة المقام (2) → y = 0', en: 'Degree num (1) < degree den (2) → y = 0' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = x³/(x²+1)</span>؟ (تمرين 29)', en: 'What is horizontal asymptote of <span class="math-display">f(x) = x³/(x²+1)</span>? (Exercise 29)' },
+                    options: [
+                        { ar: 'لا يوجد (درجة البسط > درجة المقام)', en: 'None (degree num > degree den)' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' },
+                        { ar: '<span class="math-display">y = x</span>', en: '<span class="math-display">y = x</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط (3) > درجة المقام (2) → لا خط مقارب أفقي (لكن قد يكون هناك مائل)', en: 'Degree num (3) > degree den (2) → no horizontal asymptote (but may have oblique)' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = (x²+1)/(x-2)</span>؟ (تمرين 30)', en: 'What is horizontal asymptote of <span class="math-display">f(x) = (x²+1)/(x-2)</span>? (Exercise 30)' },
+                    options: [
+                        { ar: 'لا يوجد', en: 'None' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = 2</span>', en: '<span class="math-display">y = 2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط (2) > درجة المقام (1) → لا خط مقارب أفقي', en: 'Degree num (2) > degree den (1) → no horizontal asymptote' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = (2x+1)/(3x-5)</span>؟', en: 'What is horizontal asymptote of <span class="math-display">f(x) = (2x+1)/(3x-5)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">y = 2/3</span>', en: '<span class="math-display">y = 2/3</span>' },
+                        { ar: '<span class="math-display">y = 3/2</span>', en: '<span class="math-display">y = 3/2</span>' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط = درجة المقام = 1. النسبة = 2/3. إذن y = 2/3', en: 'Degree num = degree den = 1. Ratio = 2/3. So y = 2/3' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: الخطوط المقاربة المائلة والدوال الخاصة (Q11-Q15)', en: '🔹 Section 3: Oblique Asymptotes & Special Functions (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: 'ما الخط المقارب المائل للدالة <span class="math-display">f(x) = (x²+1)/(x-2)</span>؟', en: 'What is oblique asymptote of <span class="math-display">f(x) = (x²+1)/(x-2)</span>?' },
+                    svg: svgGraphs.oblique_asymptote,
+                    options: [
+                        { ar: '<span class="math-display">y = x + 2</span>', en: '<span class="math-display">y = x + 2</span>' },
+                        { ar: '<span class="math-display">y = x - 2</span>', en: '<span class="math-display">y = x - 2</span>' },
+                        { ar: '<span class="math-display">y = 2x + 1</span>', en: '<span class="math-display">y = 2x + 1</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بالقسمة الطويلة: (x²+1)÷(x-2) = x+2 باقي 5. إذن y = x+2', en: 'By long division: (x²+1)÷(x-2) = x+2 remainder 5. So y = x+2' }
+                },
+                {
+                    q: { ar: 'متى يكون للدالة الكسرية خط مقارب مائل؟', en: 'When does rational function have oblique asymptote?' },
+                    options: [
+                        { ar: 'عندما درجة البسط = درجة المقام + 1', en: 'When degree num = degree den + 1' },
+                        { ar: 'عندما درجة البسط = درجة المقام', en: 'When degree num = degree den' },
+                        { ar: 'عندما درجة البسط < درجة المقام', en: 'When degree num < degree den' },
+                        { ar: 'دائماً', en: 'Always' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'خط مقارب مائل عندما درجة البسط أكبر بواحد من درجة المقام', en: 'Oblique asymptote when degree numerator is exactly one more than degree denominator' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = 4tan⁻¹(x) - 1</span>؟ (تمرين 27)', en: 'What is horizontal asymptote of <span class="math-display">f(x) = 4tan⁻¹(x) - 1</span>? (Exercise 27)' },
+                    options: [
+                        { ar: '<span class="math-display">y = 2π - 1</span> و <span class="math-display">y = -2π - 1</span>', en: '<span class="math-display">y = 2π - 1</span> and <span class="math-display">y = -2π - 1</span>' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = -1</span>', en: '<span class="math-display">y = -1</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'lim x→∞ tan⁻¹(x) = π/2, lim x→-∞ tan⁻¹(x) = -π/2. إذن y = 4(π/2)-1 = 2π-1 و y = -2π-1', en: 'lim x→∞ tan⁻¹(x) = π/2, lim x→-∞ tan⁻¹(x) = -π/2. So y = 4(π/2)-1 = 2π-1 and y = -2π-1' }
+                },
+                {
+                    q: { ar: 'ما مجال الدالة <span class="math-display">f(x) = ln(1-cos x)</span>؟ (تمرين 28)', en: 'What is domain of <span class="math-display">f(x) = ln(1-cos x)</span>? (Exercise 28)' },
+                    options: [
+                        { ar: 'جميع الأعداد الحقيقية ما عدا <span class="math-display">x = 2kπ</span>', en: 'All reals except <span class="math-display">x = 2kπ</span>' },
+                        { ar: 'جميع الأعداد الحقيقية', en: 'All real numbers' },
+                        { ar: '<span class="math-display">x > 0</span> فقط', en: '<span class="math-display">x > 0</span> only' },
+                        { ar: '<span class="math-display">x ≠ 0</span>', en: '<span class="math-display">x ≠ 0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'يجب 1-cos x > 0 → cos x ≠ 1 → x ≠ 2kπ حيث k عدد صحيح', en: 'Need 1-cos x > 0 → cos x ≠ 1 → x ≠ 2kπ where k is integer' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = (x³)/(x²+x-4)</span>؟ (تمرين 31)', en: 'What is horizontal asymptote of <span class="math-display">f(x) = x³/(x²+x-4)</span>? (Exercise 31)' },
+                    options: [
+                        { ar: 'لا يوجد (لكن يوجد مائل)', en: 'None (but oblique exists)' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' },
+                        { ar: '<span class="math-display">y = x</span>', en: '<span class="math-display">y = x</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط (3) > درجة المقام (2) → لا خط مقارب أفقي', en: 'Degree num (3) > degree den (2) → no horizontal asymptote' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: ' القسم 4: تمرين 32 والتمارين المتقدمة (Q16-Q20)', en: '🔹 Section 4: Exercise 32 & Advanced (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: 'ما الخطوط المقاربة للدالة <span class="math-display">f(x) = x⁴/(x³+2)</span>؟ (تمرين 32)', en: 'What are asymptotes of <span class="math-display">f(x) = x⁴/(x³+2)</span>? (Exercise 32)' },
+                    svg: svgGraphs.rational_with_hole,
+                    options: [
+                        { ar: 'مائل: <span class="math-display">y = x</span>، رأسي: <span class="math-display">x = -∛2</span>', en: 'Oblique: <span class="math-display">y = x</span>, Vertical: <span class="math-display">x = -∛2</span>' },
+                        { ar: 'أفقي: <span class="math-display">y = 0</span>', en: 'Horizontal: <span class="math-display">y = 0</span>' },
+                        { ar: 'أفقي: <span class="math-display">y = 1</span>', en: 'Horizontal: <span class="math-display">y = 1</span>' },
+                        { ar: 'لا توجد خطوط مقاربة', en: 'No asymptotes' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'بالقسمة: x⁴÷(x³+2) = x باقي -2x. مائل: y=x. رأسي: x³+2=0 → x=-∛2', en: 'Division: x⁴÷(x³+2) = x remainder -2x. Oblique: y=x. Vertical: x³+2=0 → x=-∛2' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الرأسي للدالة <span class="math-display">f(x) = 1/(x²-4)</span>؟', en: 'What are vertical asymptotes of <span class="math-display">f(x) = 1/(x²-4)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">x = 2</span> و <span class="math-display">x = -2</span>', en: '<span class="math-display">x = 2</span> and <span class="math-display">x = -2</span>' },
+                        { ar: '<span class="math-display">x = 4</span> فقط', en: '<span class="math-display">x = 4</span> only' },
+                        { ar: '<span class="math-display">x = 2</span> فقط', en: '<span class="math-display">x = 2</span> only' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'x²-4 = (x-2)(x+2) = 0 → x = 2 أو x = -2', en: 'x²-4 = (x-2)(x+2) = 0 → x = 2 or x = -2' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = (5x²-3)/(2x²+1)</span>؟', en: 'What is horizontal asymptote of <span class="math-display">f(x) = (5x²-3)/(2x²+1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">y = 5/2</span>', en: '<span class="math-display">y = 5/2</span>' },
+                        { ar: '<span class="math-display">y = 2/5</span>', en: '<span class="math-display">y = 2/5</span>' },
+                        { ar: '<span class="math-display">y = 0</span>', en: '<span class="math-display">y = 0</span>' },
+                        { ar: '<span class="math-display">y = 1</span>', en: '<span class="math-display">y = 1</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'درجة البسط = درجة المقام = 2. النسبة = 5/2', en: 'Degree num = degree den = 2. Ratio = 5/2' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الأفقي للدالة <span class="math-display">f(x) = eˣ/(eˣ+1)</span>؟', en: 'What is horizontal asymptote of <span class="math-display">f(x) = eˣ/(eˣ+1)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">y = 1</span> (عندما x→∞) و <span class="math-display">y = 0</span> (عندما x→-∞)', en: '<span class="math-display">y = 1</span> (as x→∞) and <span class="math-display">y = 0</span> (as x→-∞)' },
+                        { ar: '<span class="math-display">y = 0</span> فقط', en: '<span class="math-display">y = 0</span> only' },
+                        { ar: '<span class="math-display">y = 1</span> فقط', en: '<span class="math-display">y = 1</span> only' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'lim x→∞ eˣ/(e+1) = 1, lim x→-∞ eˣ/(eˣ+1) = 0', en: 'lim x→∞ eˣ/(eˣ+1) = 1, lim x→-∞ eˣ/(eˣ+1) = 0' }
+                },
+                {
+                    q: { ar: 'ما الخط المقارب الرأسي للدالة <span class="math-display">f(x) = tan(x)</span>؟', en: 'What are vertical asymptotes of <span class="math-display">f(x) = tan(x)</span>?' },
+                    options: [
+                        { ar: '<span class="math-display">x = π/2 + kπ</span> حيث k عدد صحيح', en: '<span class="math-display">x = π/2 + kπ</span> where k is integer' },
+                        { ar: '<span class="math-display">x = kπ</span>', en: '<span class="math-display">x = kπ</span>' },
+                        { ar: '<span class="math-display">x = 0</span>', en: '<span class="math-display">x = 0</span>' },
+                        { ar: 'لا يوجد', en: 'None' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'tan(x) = sin(x)/cos(x). المقام = 0 عندما cos(x) = 0 → x = π/2 + kπ', en: 'tan(x) = sin(x)/cos(x). Denominator = 0 when cos(x) = 0 → x = π/2 + kπ' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: تطبيق حجم بؤبؤ العين (Q21-Q25)', en: '🔹 Section 5: Pupil Size Application (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: '<strong>تمرين 33:</strong> <span class="math-display">f(x) = (80x⁻⁰·³ + 60)/(2x⁻⁰·³ + 5)</span>. ما حجم البؤبؤ عندما x → ∞ (ضوء ساطع جداً)؟', en: '<strong>Exercise 33:</strong> <span class="math-display">f(x) = (80x⁻⁰·³ + 60)/(2x⁻⁰·³ + 5)</span>. What is pupil size as x → ∞ (very bright light)?' },
+                    svg: svgGraphs.pupil_application,
+                    options: [
+                        { ar: '<span class="math-display">12 mm</span>', en: '<span class="math-display">12 mm</span>' },
+                        { ar: '<span class="math-display">16 mm</span>', en: '<span class="math-display">16 mm</span>' },
+                        { ar: '<span class="math-display">80 mm</span>', en: '<span class="math-display">80 mm</span>' },
+                        { ar: '<span class="math-display">5 mm</span>', en: '<span class="math-display">5 mm</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عندما x → ∞، x⁻·³ → 0. إذن f(x) → 60/5 = 12 mm', en: 'As x → ∞, x⁰·³ → 0. So f(x) → 60/5 = 12 mm' }
+                },
+                {
+                    q: { ar: 'نفس التمرين: ما حجم البؤبؤ عندما x → 0 (ظلام شديد)؟', en: 'Same exercise: What is pupil size as x → 0⁺ (very dark)?' },
+                    options: [
+                        { ar: '<span class="math-display">40 mm</span>', en: '<span class="math-display">40 mm</span>' },
+                        { ar: '<span class="math-display">12 mm</span>', en: '<span class="math-display">12 mm</span>' },
+                        { ar: '<span class="math-display">60 mm</span>', en: '<span class="math-display">60 mm</span>' },
+                        { ar: '<span class="math-display">0 mm</span>', en: '<span class="math-display">0 mm</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'عندما x → 0⁺، x⁻⁰·³ → ∞. الحد المسيطر: 80x⁻⁰·³/2x⁻·³ = 40 mm', en: 'As x → 0⁺, x⁻⁰·³ → ∞. Dominant term: 80x⁻⁰·³/2x⁻⁰·³ = 40 mm' }
+                },
+                {
+                    q: { ar: 'نفس التمرين: ما الحجم عندما x = 1 millilux؟', en: 'Same exercise: What is size when x = 1 millilux?' },
+                    options: [
+                        { ar: '<span class="math-display">20 mm</span>', en: '<span class="math-display">20 mm</span>' },
+                        { ar: '<span class="math-display">12 mm</span>', en: '<span class="math-display">12 mm</span>' },
+                        { ar: '<span class="math-display">40 mm</span>', en: '<span class="math-display">40 mm</span>' },
+                        { ar: '<span class="math-display">14 mm</span>', en: '<span class="math-display">14 mm</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'f(1) = (80·1 + 60)/(2·1 + 5) = 140/7 = 20 mm', en: 'f(1) = (80·1 + 60)/(2·1 + 5) = 140/7 = 20 mm' }
+                },
+                {
+                    q: { ar: 'نفس التمرين: ماذا يمثل الخط المقارب الأفقي y = 12؟', en: 'Same exercise: What does horizontal asymptote y = 12 represent?' },
+                    options: [
+                        { ar: 'الحجم الأدنى للبؤبؤ في الضوء الساطع جداً', en: 'Minimum pupil size in very bright light' },
+                        { ar: 'الحجم الأقصى للبؤبؤ', en: 'Maximum pupil size' },
+                        { ar: 'الحجم في الظلام', en: 'Size in darkness' },
+                        { ar: 'لا شيء', en: 'Nothing' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'y = 12 هو الحد الأدنى لحجم البؤبؤ عندما يكون الضوء ساطعاً جداً (x → ∞)', en: 'y = 12 is minimum pupil size when light is very bright (x → ∞)' }
+                },
+                {
+                    q: { ar: 'نفس التمرين: ماذا يمثل الخط المقارب الأفقي y = 40؟', en: 'Same exercise: What does horizontal asymptote y = 40 represent?' },
+                    options: [
+                        { ar: 'الحجم الأقصى للبؤبؤ في الظلام الشديد', en: 'Maximum pupil size in very dark conditions' },
+                        { ar: 'الحجم الأدنى للبؤبؤ', en: 'Minimum pupil size' },
+                        { ar: 'الحجم في الضوء العادي', en: 'Size in normal light' },
+                        { ar: 'لا شيء', en: 'Nothing' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'y = 40 هو الحد الأقصى لحجم البؤبؤ عندما يكون الظلام شديداً (x → 0⁺)', en: 'y = 40 is maximum pupil size in very dark conditions (x → 0⁺)' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> ' + q.q[currentLang] + '<br>';
+            
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ') ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ') <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = ' جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = ' Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? ' جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'N/A';
+    const studentClass = document.getElementById('studentClass').value || 'N/A';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<div style="font-family:Arial; direction:rtl;">';
+    questionsHTML += '<h2>📊 ' + (currentLang === 'ar' ? 'نتيجة امتحان الخطوط المقاربة' : 'Asymptotes Exam Result') + '</h2>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الاسم' : 'Name') + ':</strong> ' + name + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الشعبة' : 'Class') + ':</strong> ' + studentClass + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التاريخ' : 'Date') + ':</strong> ' + date + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الدرجة' : 'Score') + ':</strong> ' + score + ' (' + successRate + ')</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التقدير' : 'Grade') + ':</strong> ' + badge + '</p>';
+    questionsHTML += '<hr><h3>' + (currentLang === 'ar' ? 'تفاصيل الإجابات:' : 'Answer Details:') + '</h3><table style="width:100%; border-collapse:collapse;">';
+    questionsHTML += '<tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'السؤال' : 'Question') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'الصحيحة' : 'Correct') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'النتيجة' : 'Result') + '</th></tr>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si].ar;
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct].ar;
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar + '</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</table></div>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+            status.style.color = '#16a34a';
+            btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+            alert(currentLang === 'ar' ? 'تم إرسال النتيجة للمعلم بنجاح!' : 'Result sent to teacher successfully!');
+        })
+        .catch((error) => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال' : ' Failed to send';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+            alert(currentLang === 'ar' ? 'فشل الإرسال: ' + error.text : 'Failed: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+        document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+        document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        document.body.classList.toggle('en-mode', currentLang === 'en');
+    } else {
+        currentSeed = Date.now();
+    }
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
